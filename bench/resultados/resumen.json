@@ -1,0 +1,209 @@
+{
+  "entorno": {
+    "python": "3.8.20",
+    "so": "Linux-6.18.44-fc-v338-x86_64-with-glibc2.2.5",
+    "cpu": "Intel(R) Xeon(R) Processor @ 2.10GHz",
+    "nucleos_logicos": 2,
+    "ram_mb": 8022,
+    "broker": "redis",
+    "fecha": "2026-11-10 07:59:35 -0500"
+  },
+  "parametros": {
+    "duracion_s": 20.0,
+    "calentamiento_s": 3.0,
+    "repeticiones": 3
+  },
+  "red": {
+    "en_proceso": {
+      "p50_ms": 0.004,
+      "p95_ms": 0.005
+    },
+    "1_salto_triaje": {
+      "p50_ms": 1.0,
+      "p95_ms": 1.7
+    },
+    "2_saltos_gateway": {
+      "p50_ms": 3.9,
+      "p95_ms": 4.9
+    }
+  },
+  "red_duracion_s": 69.2,
+  "e4": {
+    "lat0_lock0": {
+      "dobles_mediana": 0,
+      "dobles_max": 0,
+      "dobles_min": 0,
+      "duracion_ms_mediana": 66.2,
+      "repeticiones": 5
+    },
+    "lat0_lock1": {
+      "dobles_mediana": 0,
+      "dobles_max": 0,
+      "dobles_min": 0,
+      "duracion_ms_mediana": 87.2,
+      "repeticiones": 5
+    },
+    "lat5_lock0": {
+      "dobles_mediana": 47,
+      "dobles_max": 48,
+      "dobles_min": 43,
+      "duracion_ms_mediana": 78.4,
+      "repeticiones": 5
+    },
+    "lat5_lock1": {
+      "dobles_mediana": 0,
+      "dobles_max": 0,
+      "dobles_min": 0,
+      "duracion_ms_mediana": 293.2,
+      "repeticiones": 5
+    }
+  },
+  "e4_duracion_s": 9.2,
+  "e1": {
+    "1": {
+      "rps": 78.3,
+      "p50_ms": 602.9,
+      "p95_ms": 847.9,
+      "p99_ms": 868.8,
+      "errores_pct": 0.0,
+      "cpu_gateway_pct": 23.6,
+      "cpu_triaje_prom_pct": 13.0,
+      "cpu_generador_pct": 1.7
+    },
+    "2": {
+      "rps": 156.0,
+      "p50_ms": 319.9,
+      "p95_ms": 402.6,
+      "p99_ms": 437.5,
+      "errores_pct": 0.0,
+      "cpu_gateway_pct": 50.1,
+      "cpu_triaje_prom_pct": 12.8,
+      "cpu_generador_pct": 3.5
+    },
+    "3": {
+      "rps": 213.3,
+      "p50_ms": 229.8,
+      "p95_ms": 306.8,
+      "p99_ms": 364.0,
+      "errores_pct": 0.0,
+      "cpu_gateway_pct": 78.4,
+      "cpu_triaje_prom_pct": 11.3,
+      "cpu_generador_pct": 4.7
+    },
+    "4": {
+      "rps": 225.9,
+      "p50_ms": 214.0,
+      "p95_ms": 291.7,
+      "p99_ms": 345.9,
+      "errores_pct": 0.0,
+      "cpu_gateway_pct": 89.2,
+      "cpu_triaje_prom_pct": 8.9,
+      "cpu_generador_pct": 5.0
+    }
+  },
+  "e1_duracion_s": 327.9,
+  "e6": {
+    "por_peticion": {
+      "rps": 24.9,
+      "p50_ms": 1983.2,
+      "p95_ms": 2479.4,
+      "p99_ms": 2675.6,
+      "errores_pct": 0.0,
+      "cpu_gateway_pct": 189.2
+    },
+    "compartido": {
+      "rps": 155.3,
+      "p50_ms": 319.5,
+      "p95_ms": 428.7,
+      "p99_ms": 462.0,
+      "errores_pct": 0.0,
+      "cpu_gateway_pct": 53.7
+    }
+  },
+  "e6_duracion_s": 164.6,
+  "e3": {
+    "sin_resiliencia": {
+      "rps": 152.8,
+      "errores_pct": 18.02,
+      "errores_ventana_pct": 50.0,
+      "p95_ms": 282.6,
+      "p95_ventana_ms": 341.9,
+      "recuperacion_s": 0.46
+    },
+    "con_resiliencia": {
+      "rps": 113.7,
+      "errores_pct": 0.0,
+      "errores_ventana_pct": 0.0,
+      "p95_ms": 327.1,
+      "p95_ventana_ms": 358.6,
+      "recuperacion_s": 5.25
+    }
+  },
+  "e3_duracion_s": 221.0,
+  "e3b": {
+    "sin_cb": {
+      "rps": 8.0,
+      "p50_ms": 2028.0,
+      "p95_ms": 4032.2,
+      "p99_ms": 4036.3,
+      "errores_pct": 0.0
+    },
+    "con_cb": {
+      "rps": 746.7,
+      "p50_ms": 26.1,
+      "p95_ms": 36.2,
+      "p99_ms": 43.3,
+      "errores_pct": 0.0
+    }
+  },
+  "e3b_duracion_s": 166.8,
+  "e2": {
+    "n_cpu_iteraciones": 224507,
+    "es_1p_1h": 10.343,
+    "es_1p_2h": 5.189,
+    "es_1p_4h": 2.604,
+    "es_1p_8h": 1.308,
+    "es_1p_16h": 0.689,
+    "es_1p_32h": 0.38,
+    "cpu_1p_1h": 2.206,
+    "cpu_1p_4h": 2.558,
+    "cpu_1p_8h": 2.662,
+    "cpu_2p_1h": 1.219,
+    "cpu_2p_4h": 1.187
+  },
+  "e2_duracion_s": 184.2,
+  "e5": {
+    "local": {
+      "perdidas_mediana": 8,
+      "perdidas_por_rep": [
+        8,
+        8,
+        8
+      ],
+      "drenado_s_mediana": null,
+      "encolado_s_mediana": 0.17
+    },
+    "redis": {
+      "perdidas_mediana": 0,
+      "perdidas_por_rep": [
+        0,
+        0,
+        0
+      ],
+      "drenado_s_mediana": 6.08,
+      "encolado_s_mediana": 0.21
+    }
+  },
+  "e5_duracion_s": 81.8,
+  "e1c": {
+    "rps": 75.0,
+    "p50_ms": 132.8,
+    "p95_ms": 160.3,
+    "p99_ms": 171.0,
+    "errores_pct": 0.0,
+    "citas": 1279,
+    "dobles": 0,
+    "recordatorios_hechos": 1279
+  },
+  "e1c_duracion_s": 76.0
+}

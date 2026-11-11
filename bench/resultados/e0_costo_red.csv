@@ -1,0 +1,10 @@
+via,rep,p50_ms,p95_ms
+en_proceso,1,0.004,0.005
+en_proceso,2,0.004,0.005
+en_proceso,3,0.004,0.005
+1_salto_triaje,1,1.1,1.8
+1_salto_triaje,2,1.0,1.6
+1_salto_triaje,3,1.0,1.7
+2_saltos_gateway,1,3.9,4.9
+2_saltos_gateway,2,3.9,4.9
+2_saltos_gateway,3,3.8,4.7

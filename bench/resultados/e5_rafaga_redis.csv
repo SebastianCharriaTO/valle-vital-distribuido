@@ -1,0 +1,4 @@
+broker,rep,encolado_s,hechas,perdidas,drenado_s
+redis,1,0.21,1000,0,5.99
+redis,2,0.2,1000,0,6.08
+redis,3,0.21,1000,0,6.09
