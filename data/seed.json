@@ -1,0 +1,41 @@
+{
+  "_aviso": "DATOS SINTETICOS. Entidad, personas y cifras son ficticias; creados solo para fines academicos.",
+  "sedes": [
+    {"id": "S1", "nombre": "Sede Centro (ficticia)", "municipio": "Cali"},
+    {"id": "S2", "nombre": "Sede Sur (ficticia)", "municipio": "Cali"},
+    {"id": "S3", "nombre": "Sede Jamundi (ficticia)", "municipio": "Jamundi"}
+  ],
+  "profesionales": [
+    {"id": "P1", "nombre": "Dr. Demo Uno", "especialidad": "Medicina general", "sede_id": "S1"},
+    {"id": "P2", "nombre": "Dra. Demo Dos", "especialidad": "Medicina general", "sede_id": "S2"},
+    {"id": "P3", "nombre": "Dr. Demo Tres", "especialidad": "Pediatria", "sede_id": "S1"},
+    {"id": "P4", "nombre": "Dra. Demo Cuatro", "especialidad": "Medicina general", "sede_id": "S3"},
+    {"id": "P5", "nombre": "Dr. Demo Cinco", "especialidad": "Medicina interna", "sede_id": "S2"}
+  ],
+  "pacientes": [
+    {"id": "PAC-001", "nombre": "Paciente Demo 001", "edad": 34},
+    {"id": "PAC-002", "nombre": "Paciente Demo 002", "edad": 71},
+    {"id": "PAC-003", "nombre": "Paciente Demo 003", "edad": 3},
+    {"id": "PAC-004", "nombre": "Paciente Demo 004", "edad": 52}
+  ],
+  "medicamentos": [
+    {"id": "M1", "nombre": "Acetaminofen 500 mg (tabletas)"},
+    {"id": "M2", "nombre": "Amoxicilina 500 mg (capsulas)"},
+    {"id": "M3", "nombre": "Losartan 50 mg (tabletas)"},
+    {"id": "M4", "nombre": "Salbutamol inhalador"}
+  ],
+  "inventario": [
+    {"sede_id": "S1", "medicamento_id": "M1", "stock": 400, "minimo": 100},
+    {"sede_id": "S2", "medicamento_id": "M1", "stock": 60, "minimo": 100},
+    {"sede_id": "S3", "medicamento_id": "M1", "stock": 150, "minimo": 100},
+    {"sede_id": "S1", "medicamento_id": "M2", "stock": 90, "minimo": 80},
+    {"sede_id": "S2", "medicamento_id": "M2", "stock": 70, "minimo": 80},
+    {"sede_id": "S3", "medicamento_id": "M2", "stock": 100, "minimo": 80},
+    {"sede_id": "S1", "medicamento_id": "M3", "stock": 300, "minimo": 120},
+    {"sede_id": "S2", "medicamento_id": "M3", "stock": 150, "minimo": 120},
+    {"sede_id": "S3", "medicamento_id": "M3", "stock": 40, "minimo": 120},
+    {"sede_id": "S1", "medicamento_id": "M4", "stock": 12, "minimo": 20},
+    {"sede_id": "S2", "medicamento_id": "M4", "stock": 18, "minimo": 20},
+    {"sede_id": "S3", "medicamento_id": "M4", "stock": 15, "minimo": 20}
+  ]
+}

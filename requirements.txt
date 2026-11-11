@@ -1,0 +1,8 @@
+# Versiones fijadas que instalan y pasan las pruebas en Python 3.8.20 y 3.12 (verificado el 9 nov 2026).
+fastapi==0.124.4
+starlette==0.44.0
+pydantic==2.10.6
+uvicorn==0.33.0
+httpx==0.28.1
+anyio==4.5.2
+redis==6.1.1
