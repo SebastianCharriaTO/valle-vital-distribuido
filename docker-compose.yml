@@ -1,0 +1,110 @@
+# Plan A: cada nodo es un contenedor en la red vv-net (Docker Desktop + WSL2).
+#   docker compose up --build -d
+#   docker compose stop triaje-2      # caida de un nodo durante la demo
+#   docker compose start triaje-2
+name: valle-vital
+
+x-servicio: &servicio
+  build: .
+  image: valle-vital-distribuido:1.0
+  networks: [vv-net]
+  restart: "no"
+  environment: &entorno
+    BROKER_URL: redis://broker:6379/0
+    HILOS_POR_NODO: "40"
+    LOG_NIVEL: INFO
+
+x-salud: &salud
+  interval: 5s
+  timeout: 3s
+  retries: 5
+  start_period: 10s
+
+services:
+  broker:
+    image: redis:7-alpine
+    command: ["redis-server", "--save", "", "--appendonly", "no"]
+    networks: [vv-net]
+    ports: ["6379:6379"]
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      <<: *salud
+
+  triaje-1:
+    <<: *servicio
+    command: ["uvicorn", "servicios.triaje.app:app", "--host", "0.0.0.0", "--port", "8101", "--no-access-log"]
+    environment:
+      <<: *entorno
+      NODO_NOMBRE: triaje-1
+      LLM_LATENCIA_MS: "100"
+    ports: ["8101:8101"]
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request;urllib.request.urlopen('http://localhost:8101/health')"]
+      <<: *salud
+
+  triaje-2:
+    <<: *servicio
+    command: ["uvicorn", "servicios.triaje.app:app", "--host", "0.0.0.0", "--port", "8102", "--no-access-log"]
+    environment:
+      <<: *entorno
+      NODO_NOMBRE: triaje-2
+      LLM_LATENCIA_MS: "100"
+    ports: ["8102:8102"]
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request;urllib.request.urlopen('http://localhost:8102/health')"]
+      <<: *salud
+
+  agenda:
+    <<: *servicio
+    command: ["uvicorn", "servicios.agenda.app:app", "--host", "0.0.0.0", "--port", "8201", "--no-access-log"]
+    environment:
+      <<: *entorno
+      NODO_NOMBRE: agenda
+      AGENDA_LOCK: "1"
+    ports: ["8201:8201"]
+    depends_on:
+      broker: {condition: service_healthy}
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request;urllib.request.urlopen('http://localhost:8201/health')"]
+      <<: *salud
+
+  gateway:
+    <<: *servicio
+    command: ["uvicorn", "servicios.gateway.app:app", "--host", "0.0.0.0", "--port", "8000", "--no-access-log"]
+    environment:
+      <<: *entorno
+      NODO_NOMBRE: gateway
+      TRIAJE_URLS: http://triaje-1:8101,http://triaje-2:8102
+      AGENDA_URL: http://agenda:8201
+      RESILIENCIA: "1"
+    ports: ["8000:8000"]
+    depends_on:
+      broker: {condition: service_healthy}
+      triaje-1: {condition: service_healthy}
+      triaje-2: {condition: service_healthy}
+      agenda: {condition: service_healthy}
+
+  monitor:
+    <<: *servicio
+    command: ["uvicorn", "servicios.monitor.app:app", "--host", "0.0.0.0", "--port", "8300", "--no-access-log"]
+    environment:
+      <<: *entorno
+      NODO_NOMBRE: monitor
+    ports: ["8300:8300"]
+    depends_on:
+      broker: {condition: service_healthy}
+
+  worker:
+    <<: *servicio
+    command: ["python", "-m", "servicios.worker.worker"]
+    environment:
+      <<: *entorno
+      WORKER_HILOS: "8"
+    deploy:
+      replicas: 2          # 2 procesos x 8 hilos compitiendo por la cola
+    depends_on:
+      broker: {condition: service_healthy}
+
+networks:
+  vv-net:
+    driver: bridge
