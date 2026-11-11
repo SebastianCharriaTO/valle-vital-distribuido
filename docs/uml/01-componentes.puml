@@ -1,0 +1,54 @@
+@startuml 01-componentes
+' Diagrama de componentes - Valle Vital distribuido (UML 2.5.1, PlantUML)
+skinparam defaultFontSize 16
+skinparam defaultFontName Arial
+skinparam componentStyle uml2
+skinparam shadowing false
+skinparam ArrowFontSize 14
+skinparam ArrowColor #333333
+skinparam nodesep 25
+skinparam ranksep 45
+skinparam component {
+  BackgroundColor #EEF3FA
+  BorderColor #1F3A5F
+}
+top to bottom direction
+
+actor "Cliente" as cli
+
+component "gateway <<API Gateway>>" as gw {
+  portin ":8000" as pgw
+  component "SolicitudCita\nMediator" as med
+  component "TriajeProxy" as tp
+  component "AgendaProxy" as ap
+  component "Retry · CB\n· Bulkhead" as res
+}
+
+interface "ITriaje" as itri
+interface "IAgenda" as iage
+component "triaje-1..N\n<<sin estado>>" as tri
+component "agenda\n<<unico escritor>>" as age
+
+component "broker" as bro {
+  portin "vv:tareas" as pcola
+  portin "vv.eventos.*" as ptop
+}
+component "worker\n(W hilos)" as wk
+component "monitor" as mon
+
+cli --> pgw : POST /api/citas
+pgw --> med
+med --> tp
+med --> ap
+tp ..> res
+ap ..> res
+tp --> itri : HTTP
+ap --> iage : HTTP
+itri -- tri
+iage -- age
+age --> pcola
+age --> ptop
+wk -up-> pcola : tomar / ACK
+wk -up-> ptop : publicar
+mon -up-> ptop : suscribir
+@enduml

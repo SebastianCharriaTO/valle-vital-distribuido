@@ -1,0 +1,41 @@
+@startuml 02b-secuencia-falla
+' Secuencia B: caida de triaje-2 bajo carga (Retry + Circuit Breaker por replica + fallback)
+skinparam defaultFontSize 15
+skinparam defaultFontName Arial
+skinparam shadowing false
+skinparam sequence {
+  ParticipantBackgroundColor #EEF3FA
+  ParticipantBorderColor #1F3A5F
+}
+autonumber
+participant "gateway\nTriajeProxy" as TP
+participant "CB\ntriaje-2" as CB2
+participant "triaje-2\n(caido)" as T2 #FDE2E1
+participant "triaje-1" as T1
+queue "broker" as B
+participant "monitor" as MO
+
+TP -> CB2 : permitir()?
+CB2 --> TP : si (cerrado)
+TP -> T2 : POST /triaje
+T2 --> TP : ConnectError
+TP -> CB2 : registrar_fallo()
+loop Retry (max. 2, backoff exponencial con jitter)
+  TP -> T1 : POST /triaje (siguiente replica)
+  T1 --> TP : 200 ResultadoTriage
+end
+note over CB2 : al 3.er fallo consecutivo:\nCERRADO -> ABIERTO
+CB2 -> B : PUBLISH nodo.caido (triaje-2)
+B -> MO : nodo.caido
+TP -> CB2 : permitir()?
+CB2 --> TP : no (abierto): se omite triaje-2
+TP -> T1 : POST /triaje
+alt todas las replicas caidas o abiertas
+  TP -> TP : ServicioNoDisponible ->\nreglas locales (modo degradado)
+end
+... tras CB_SEGUNDOS_RECUPERACION ...
+CB2 -> CB2 : ABIERTO -> SEMIABIERTO
+TP -> T2 : una sola sonda
+T2 --> TP : 200 (nodo relanzado)
+CB2 -> B : PUBLISH nodo.recuperado
+@enduml

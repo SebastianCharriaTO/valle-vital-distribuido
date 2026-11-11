@@ -1,0 +1,40 @@
+@startuml 02a-secuencia-cita
+' Secuencia A: solicitar cita (sincrono + asincrono), con nodos e hilos
+skinparam defaultFontSize 15
+skinparam defaultFontName Arial
+skinparam shadowing false
+skinparam ParticipantPadding 4
+skinparam sequence {
+  ParticipantBackgroundColor #EEF3FA
+  ParticipantBorderColor #1F3A5F
+}
+autonumber
+actor Paciente as P
+participant "gateway\n(hilo AnyIO)" as GW
+participant "Mediator" as M
+participant "triaje-k\n(hilo)" as T
+participant "agenda\n(Lock)" as A
+queue "broker" as B
+participant "worker\n(hilo i)" as W
+participant "monitor" as MO
+
+P -> GW : POST /api/citas
+GW -> M : solicitar(s, cid)
+M -> T : POST /triaje\n[X-Correlation-ID]
+T -> T : IA simulada\n(~100 ms E/S)
+T --> M : 200 prioridad
+M -> A : POST /citas
+A -> A : with lock:\nfranja libre ->\nocupada
+A -> B : PUBLISH\ncita.asignada
+A -> B : XADD\nrecordatorio
+A --> M : 201 Cita
+M --> GW : cita
+GW --> P : 201 (no espera\nal worker)
+par asincrono
+  B -> W : XREADGROUP
+  W -> W : recordatorio
+  W -> B : SADD + XACK
+else
+  B -> MO : cita.asignada
+end
+@enduml

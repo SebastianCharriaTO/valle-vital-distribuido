@@ -1,0 +1,36 @@
+@startuml 03-despliegue
+' Diagrama de despliegue - Plan A (Docker Compose en WSL2)
+skinparam defaultFontSize 16
+skinparam defaultFontName Arial
+skinparam shadowing false
+skinparam ArrowFontSize 14
+skinparam nodesep 25
+skinparam ranksep 45
+skinparam node {
+  BackgroundColor #F4F7FB
+  BorderColor #1F3A5F
+}
+top to bottom direction
+
+node "Navegador /\ngenerador de carga" as nav <<device>>
+
+node "PC: Windows 11 + WSL2" <<device>> {
+  node "Docker Engine · red vv-net" <<executionEnvironment>> {
+    node "gateway :8000" as gw <<container>>
+    node "triaje-1 :8101" as t1 <<container>>
+    node "triaje-2 :8102" as t2 <<container>>
+    node "agenda :8201" as ag <<container>>
+    node "broker :6379\nredis:7-alpine" as br <<container>>
+    node "worker x2\n8 hilos c/u" as wk <<container>>
+    node "monitor :8300" as mo <<container>>
+  }
+}
+
+nav --> gw : HTTP
+gw --> t1 : HTTP
+gw --> t2 : HTTP
+gw --> ag : HTTP
+ag --> br : RESP
+br <-- wk : RESP
+br <-- mo : RESP
+@enduml
